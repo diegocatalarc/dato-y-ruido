@@ -12,7 +12,7 @@
 //   --idioma <código>     idioma del guion (por defecto, es)
 //   --modelo <nombre>     deepseek-flash (por defecto) o deepseek-v4-pro
 //   --audio <modo>        auto | edge | tts | say | no (por defecto, auto)
-//   --voz <nombre>        es-CL-CatalinaNeural (por defecto), otra voz neuronal, o stella/tide para TTS
+//   --voz <nombre>        es-CL-LorenzoNeural (por defecto), otra voz neuronal, o stella/tide para TTS
 //   --base-url <url>      endpoint alternativo (pruebas)
 //   --raiz <ruta>         raíz del proyecto (pruebas)
 //   --sin-construir       no regenera el sitio al terminar
@@ -52,7 +52,7 @@ const fecha = opcion("fecha", new Date().toISOString().slice(0, 10));
 const idioma = opcion("idioma", "es");
 const modelo = opcion("modelo", "deepseek-flash");
 const modoAudio = opcion("audio", "auto");
-const voz = opcion("voz", "stella");
+const voz = opcion("voz", "es-CL-LorenzoNeural");
 const simulacro = bandera("simulacro");
 const construirAlFinal = !bandera("sin-construir");
 const topeBusquedas = Number(opcion("max-busquedas", 8));

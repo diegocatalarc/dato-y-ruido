@@ -56,7 +56,7 @@ const porDefecto = existsSync(join(raiz, "podcast.json"))
   : {};
 const idioma = opcion("idioma", metadata.idioma ?? porDefecto.idioma ?? "es");
 const modo = opcion("modo", "auto");
-const voz = opcion("voz", "stella");
+const voz = opcion("voz", "es-CL-LorenzoNeural");
 const guion = readFileSync(rutaGuion, "utf8");
 
 console.log(`Audio · ${carpeta}`);

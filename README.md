@@ -109,7 +109,7 @@ Si la edición rechaza, no se publica nada y el rastro queda para corregir.
 | `--fecha` | hoy | Fecha de emisión |
 | `--modelo` | `deepseek-flash` | O `deepseek-v4-pro` para más criterio |
 | `--audio` | `auto` | `edge`, `tts`, `say`, `no` |
-| `--voz` | `es-CL-CatalinaNeural` | Id neuronal (`es-MX-DaliaNeural`…) o `stella`/`tide` para TTS |
+| `--voz` | `es-CL-LorenzoNeural` | Id neuronal (`es-MX-DaliaNeural`…) o `stella`/`tide` para TTS |
 | `--simulacro` | — | Recorre todo el flujo sin llamar a la API |
 
 El gasto de la ejecución se escribe en `coste.json` dentro de la carpeta del episodio: llamadas,
@@ -139,8 +139,8 @@ búsquedas, lecturas, tokens y USD estimados.
 
 ## Audio
 
-Cada episodio puede tener audio real. El episodio 01 lo tiene: 12 minutos, voz sintética del
-sistema, MP3 de 96 kbps, con su `<enclosure>` en el feed.
+Cada episodio puede tener audio real. El episodio 01 lo tiene: 11 minutos con voz neuronal
+(Lorenzo, español de Chile), MP3, con su `<enclosure>` en el feed.
 
 Cuatro caminos, en orden de calidad y coste:
 
@@ -158,8 +158,8 @@ python3 -m venv .venv-audio
 .venv-audio/bin/pip install edge-tts
 ```
 
-Voces españolas disponibles con `--voz`: `es-CL-CatalinaNeural` (Chile, por defecto),
-`es-CL-LorenzoNeural`, `es-MX-DaliaNeural`, `es-ES-ElviraNeural`, `es-AR-ElenaNeural`. En modo
+Voces españolas disponibles con `--voz`: `es-CL-LorenzoNeural` (Chile, por defecto),
+`es-CL-CatalinaNeural`, `es-MX-DaliaNeural`, `es-ES-ElviraNeural`, `es-AR-ElenaNeural`. En modo
 `auto` el sistema elige `edge` si está instalado, luego `tts` si el idioma está soportado y, si no,
 `say`.
 

@@ -119,7 +119,7 @@ function existeEdge() {
 /** Voz neuronal por defecto según el idioma del guion. */
 function vozPorIdioma(idioma) {
   const mapa = {
-    es: "es-CL-CatalinaNeural",
+    es: "es-CL-LorenzoNeural",
     en: "en-AU-NatashaNeural",
     pt: "pt-BR-FranciscaNeural",
     fr: "fr-FR-DeniseNeural",

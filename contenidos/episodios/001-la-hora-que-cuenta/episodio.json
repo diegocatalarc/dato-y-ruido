@@ -1,0 +1,70 @@
+{
+  "numero": 1,
+  "slug": "la-hora-que-cuenta",
+  "titulo": "La hora que cuenta",
+  "subtitulo": "El 4,7 % de desempleo mide menos de lo que crees",
+  "fecha": "2026-11-17",
+  "duracionMin": 12,
+  "resumen": "El titular dijo 4,7 %, el más alto en casi cinco años. Abrimos la cifra: qué cuenta como empleado, qué deja fuera y por qué la participación cambia por completo lo que el titular significa.",
+  "escaleta": [
+    {
+      "nombre": "El titular",
+      "minutos": 2,
+      "objetivo": "Instalar la cifra que circula y la decisión que depende de ella."
+    },
+    {
+      "nombre": "De dónde sale",
+      "minutos": 3,
+      "objetivo": "Fuente, definición operativa, semana de referencia y series desestacionalizada y de tendencia."
+    },
+    {
+      "nombre": "Qué esconde",
+      "minutos": 4,
+      "objetivo": "Subempleo, denominador, composición de horas y ruido de una encuesta mensual."
+    },
+    {
+      "nombre": "Cómo se usa bien",
+      "minutos": 3,
+      "objetivo": "Las tres cifras que se miran juntas y cómo citar sin inventar."
+    },
+    {
+      "nombre": "Cierre",
+      "minutos": 1,
+      "objetivo": "Tres preguntas para la próxima cifra y la fuente a abrir."
+    }
+  ],
+  "fuentes": [
+    {
+      "n": 1,
+      "titulo": "ABS · Labour Force, Australia, September 2026",
+      "url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia/latest-release",
+      "nota": "Edición de septiembre de 2026, publicada el 15/10/2026. La dirección muestra la última edición."
+    },
+    {
+      "n": 2,
+      "titulo": "ABS · Media release: Unemployment rate at 4.7% in September",
+      "url": "https://www.abs.gov.au/media-centre/media-releases/unemployment-rate-47-september",
+      "nota": "15/10/2026. Tasas, horas, participación y advertencia metodológica."
+    },
+    {
+      "n": 3,
+      "titulo": "ABS · How the ABS measures unemployment",
+      "url": "https://www.abs.gov.au/AUSSTATS/Abs@.Nsf/39433889d406eeb9ca2570610019e9a5/fc7304c401118f58ca25823d0018fd8c!OpenDocument",
+      "nota": "Definición: una hora, cuatro semanas, disponibilidad."
+    },
+    {
+      "n": 4,
+      "titulo": "ABS · Labour Force Survey, conceptos",
+      "url": "https://www.ausstats.abs.gov.au/ausstats/subscriber.nsf/0/00C38DEF5BCC5FC4CA25823D0018FE1C/$File/3.+the+labour+force+survey.pdf",
+      "nota": "Fuerza laboral, empleo y desempleo: la fórmula de la tasa."
+    },
+    {
+      "n": 5,
+      "titulo": "PS News · Unemployment rate defies predictions to hit 4.7 per cent",
+      "url": "https://psnews.com.au/unemployment-rate-defies-predictions-to-hit-4-7-per-cent/187082/",
+      "nota": "Ejemplo del titular que circula; no es fuente del dato."
+    }
+  ],
+  "audio": "audio.mp3",
+  "idioma": "es-AU"
+}

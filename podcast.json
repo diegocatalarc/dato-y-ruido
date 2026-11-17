@@ -1,0 +1,11 @@
+{
+  "nombre": "Dato y Ruido",
+  "tagline": "Análisis de datos con método",
+  "descripcion": "Cada episodio coge una cifra que circula en Australia y muestra qué mide, qué esconde y cómo usarla bien. Sin hype, con la fuente a la vista.",
+  "autor": "Dato y Ruido",
+  "email": "hola@datoyruido.example",
+  "idioma": "es-AU",
+  "urlBase": "https://diegocatalarc.github.io/dato-y-ruido",
+  "color": "#f2a860",
+  "fondo": "#0b0a09"
+}

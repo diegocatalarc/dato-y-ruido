@@ -191,6 +191,7 @@ const datosPortada = await evaluar(`(() => {
     enlaceEpisodio: document.querySelector('.tarjeta-enlace')?.getAttribute('href') ?? '',
     scrollWidth: document.documentElement.scrollWidth,
     innerWidth: window.innerWidth,
+    fondo: getComputedStyle(document.body).backgroundColor,
   };
 })()`);
 
@@ -198,6 +199,7 @@ comprobar("portada: título", datosPortada.titulo.length > 10, datosPortada.titu
 comprobar("portada: idioma es", datosPortada.lang === "es");
 comprobar("portada: viewport", /width=device-width/i.test(datosPortada.viewport));
 comprobar("portada: sin recursos de red", datosPortada.remotos.length === 0, datosPortada.remotos.join(", "));
+comprobar("portada: hoja de estilo aplicada", datosPortada.fondo !== "rgba(0, 0, 0, 0)", datosPortada.fondo);
 comprobar("portada: tarjetas", datosPortada.tarjetas >= 1, `${datosPortada.tarjetas}`);
 comprobar("portada: enlace a episodio", datosPortada.enlaceEpisodio.includes("episodio/"), datosPortada.enlaceEpisodio);
 

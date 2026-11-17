@@ -447,6 +447,16 @@ ${items}
 
 const episodios = cargarEpisodios();
 
+mkdirSync(SITIO, { recursive: true });
+const RECURSOS = join(RAIZ, "recursos");
+if (existsSync(RECURSOS)) {
+  for (const entrada of readdirSync(RECURSOS, { withFileTypes: true })) {
+    if (entrada.isFile()) {
+      copyFileSync(join(RECURSOS, entrada.name), join(SITIO, entrada.name));
+    }
+  }
+}
+
 rmSync(join(SITIO, "episodio"), { recursive: true, force: true });
 for (const [indice, episodio] of episodios.entries()) {
   const destino = join(SITIO, "episodio", episodio.slug);

@@ -183,8 +183,10 @@ reconstruye el sitio. Para publicar en Apple Podcasts o Spotify añade además u
 podcast-datos/
   podcast.json                 Marca, descripción y URL base del sitio
   biblia.md                    Qué es el programa: promesa, voz, cinco secciones, reglas de datos
-  construir.mjs                Genera sitio/ desde contenidos/ (sin dependencias)
+  construir.mjs                Genera sitio/ desde contenidos/ y recursos/ (sin dependencias)
   capturar.mjs                 Verificación en Chrome headless + capturas
+  publicar.sh                  Publica en GitHub Pages con gh (idempotente)
+  recursos/                    estilos.css y reproductor.js: fuente que se copia a sitio/
   proceso/
     workflow.mjs               Los cinco agentes dentro de DSH (herramienta workflow)
     verificar-workflow.mjs     Comprueba la sintaxis del script del workflow
@@ -202,9 +204,8 @@ podcast-datos/
       fuentes.md               Lista numerada y cálculos propios
       edicion.md               Fact-check y veredicto
       episodio.json            Metadatos que consume el generador
-  sitio/                       Salida publicada (se regenera; no se edita a mano)
-    index.html · feed.xml · episodios.json · estilos.css · reproductor.js
-    episodio/<slug>/index.html
+  sitio/                       Salida publicada: se regenera y no se versiona (está en .gitignore)
+    index.html · feed.xml · episodios.json · estilos.css · reproductor.js · episodio/<slug>/
   .github/workflows/paginas.yml   Despliegue en GitHub Pages
 ```
 

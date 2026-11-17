@@ -18,9 +18,14 @@ if ! command -v gh >/dev/null 2>&1; then
 fi
 
 if ! gh auth status >/dev/null 2>&1; then
-  echo "gh no está autenticado. Ejecuta primero:"
-  echo "  gh auth login -h github.com"
-  exit 1
+  echo "gh no está autenticado: inicio sesión y sigo."
+  echo
+  if ! gh auth login --hostname github.com --git-protocol https --web; then
+    echo
+    echo "No se completó el inicio de sesión. Vuelve a ejecutar ./publicar.sh cuando lo tengas."
+    exit 1
+  fi
+  echo
 fi
 
 # Credenciales de git para el push (idempotente).

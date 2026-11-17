@@ -4,7 +4,7 @@
 //   node proceso/api/narrar.mjs --episodio 001-la-hora-que-cuenta --modo say
 //   DEEPSEEK_API_KEY=... node proceso/api/narrar.mjs --episodio 002-... --modo tts --voz stella
 //
-// Modos: auto (por defecto) | tts | say | no
+// Modos: auto (por defecto) | edge | tts | say | no
 
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";

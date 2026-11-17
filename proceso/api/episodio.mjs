@@ -11,8 +11,8 @@
 //   --fecha <AAAA-MM-DD>  fecha de publicación (por defecto, hoy)
 //   --idioma <código>     idioma del guion (por defecto, es)
 //   --modelo <nombre>     deepseek-flash (por defecto) o deepseek-v4-pro
-//   --audio <modo>        auto | tts | say | no (por defecto, auto)
-//   --voz <nombre>        stella (por defecto) o tide, solo para TTS de DeepSeek
+//   --audio <modo>        auto | edge | tts | say | no (por defecto, auto)
+//   --voz <nombre>        es-CL-CatalinaNeural (por defecto), otra voz neuronal, o stella/tide para TTS
 //   --base-url <url>      endpoint alternativo (pruebas)
 //   --raiz <ruta>         raíz del proyecto (pruebas)
 //   --sin-construir       no regenera el sitio al terminar

@@ -108,8 +108,8 @@ Si la edición rechaza, no se publica nada y el rastro queda para corregir.
 | `--slug` | derivado del tema | Nombre de carpeta |
 | `--fecha` | hoy | Fecha de emisión |
 | `--modelo` | `deepseek-flash` | O `deepseek-v4-pro` para más criterio |
-| `--audio` | `auto` | `tts`, `say` (voz local), `no` |
-| `--voz` | `stella` | O `tide`, solo para TTS |
+| `--audio` | `auto` | `edge`, `tts`, `say`, `no` |
+| `--voz` | `es-CL-CatalinaNeural` | Id neuronal (`es-MX-DaliaNeural`…) o `stella`/`tide` para TTS |
 | `--simulacro` | — | Recorre todo el flujo sin llamar a la API |
 
 El gasto de la ejecución se escribe en `coste.json` dentro de la carpeta del episodio: llamadas,
@@ -142,13 +142,26 @@ búsquedas, lecturas, tokens y USD estimados.
 Cada episodio puede tener audio real. El episodio 01 lo tiene: 12 minutos, voz sintética del
 sistema, MP3 de 96 kbps, con su `<enclosure>` en el feed.
 
-Tres caminos, en orden de calidad y coste:
+Cuatro caminos, en orden de calidad y coste:
 
 | Modo | Cómo | Coste | Idioma |
 | --- | --- | --- | --- |
-| `say` | Voz del sistema (macOS), gratis y local | 0 | Español y más |
+| `edge` | Voz neuronal (edge-tts), la que suena a podcast | 0 | Español y más |
 | `tts` | TTS de la API de DeepSeek, voces `stella` y `tide` | 0,45 USD por 10.000 caracteres | Solo zh, yue, en, ja, ko, ms, ar, id, th, vi |
+| `say` | Voz del sistema (macOS), robótica | 0 | Español y más |
 | Grabación | Tu voz, editada a mano | 0 | El que quieras |
+
+La voz neuronal se instala una vez y no necesita clave:
+
+```sh
+python3 -m venv .venv-audio
+.venv-audio/bin/pip install edge-tts
+```
+
+Voces españolas disponibles con `--voz`: `es-CL-CatalinaNeural` (Chile, por defecto),
+`es-CL-LorenzoNeural`, `es-MX-DaliaNeural`, `es-ES-ElviraNeural`, `es-AR-ElenaNeural`. En modo
+`auto` el sistema elige `edge` si está instalado, luego `tts` si el idioma está soportado y, si no,
+`say`.
 
 **El TTS de DeepSeek no publica español.** No es una limitación del sistema: es la lista de idiomas
 del servicio. Por eso `--audio auto` usa `say` cuando el guion es en español y `tts` cuando el

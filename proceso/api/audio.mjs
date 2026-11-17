@@ -2,17 +2,21 @@
 //
 // - TTS de DeepSeek: solo para los idiomas publicados (no incluye español).
 //   Se pide PCM (24 kHz, 16 bits, mono), se concatena y se envuelve en un WAV.
-// - Voz local de macOS (`say`): sirve para español y no cuesta nada.
+// - Voz neuronal (edge-tts, sin clave): la mejor calidad para español.
+// - Voz local de macOS (`say`): el último recurso, sin coste ni instalación.
 // - Si hay ffmpeg se convierte a MP3; si no, se queda en WAV (lo reproducen los
 //   navegadores, pero los directorios de podcast prefieren MP3).
 
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { IDIOMAS_TTS } from "./cliente.mjs";
 
+const AQUI = dirname(fileURLToPath(import.meta.url));
+const RAIZ = join(AQUI, "..", "..");
 const FRECUENCIA = 24000;
 const MAX_CARACTERES_TTS = 9000;
 
@@ -24,13 +28,21 @@ export async function crearAudio({ modo, idioma, cliente, voz, guion, dir, log }
   const soportaTts = IDIOMAS_TTS.includes(idiomaBase);
   const puedeDecir = process.platform === "darwin" && existeBinario("say");
 
+  const vozEfectiva = vozNeuronal(voz) ?? vozPorIdioma(idiomaBase);
+  const puedeEdge = existeEdge() && Boolean(vozEfectiva);
   let efectivo = modo;
   if (modo === "auto") {
-    efectivo = soportaTts ? "tts" : puedeDecir ? "say" : null;
-    if (!soportaTts) {
-      log(
-        `el TTS de DeepSeek no publica ${idiomaBase}; se usa la voz local${puedeDecir ? "" : " (no disponible en este sistema)"}`,
-      );
+    if (puedeEdge) {
+      efectivo = "edge";
+    } else if (soportaTts) {
+      efectivo = "tts";
+    } else if (puedeDecir) {
+      efectivo = "say";
+    } else {
+      efectivo = null;
+    }
+    if (!puedeEdge) {
+      log(`voz neuronal no disponible; se usa ${efectivo ?? "ninguna voz"}`);
     }
   }
 
@@ -53,6 +65,7 @@ export async function crearAudio({ modo, idioma, cliente, voz, guion, dir, log }
   }
 
   try {
+    if (efectivo === "edge") return await conEdge({ texto, dir, voz: vozEfectiva, log });
     if (efectivo === "tts") return await conTts({ cliente, voz, texto, dir, log });
     return await conVozLocal({ texto, dir, log });
   } catch (error) {
@@ -88,6 +101,82 @@ async function conTts({ cliente, voz, texto, dir, log }) {
   const wav = join(dir, "audio.wav");
   writeFileSync(wav, envolverWav(Buffer.concat(pcm)));
   return aMp3SiSePuede(wav, dir, log);
+}
+
+/** Ruta del ejecutable de edge-tts (venv local o variable de entorno). */
+function rutaEdge() {
+  return process.env.EDGE_TTS_BIN ?? join(RAIZ, ".venv-audio", "bin", "edge-tts");
+}
+
+function existeEdge() {
+  try {
+    return existsSync(rutaEdge());
+  } catch {
+    return false;
+  }
+}
+
+/** Voz neuronal por defecto según el idioma del guion. */
+function vozPorIdioma(idioma) {
+  const mapa = {
+    es: "es-CL-CatalinaNeural",
+    en: "en-AU-NatashaNeural",
+    pt: "pt-BR-FranciscaNeural",
+    fr: "fr-FR-DeniseNeural",
+    de: "de-DE-KatjaNeural",
+    it: "it-IT-ElsaNeural",
+  };
+  return mapa[idioma] ?? null;
+}
+
+/** Una voz neuronal es cualquier identificador con formato es-XX-NombreNeural. */
+function vozNeuronal(voz) {
+  return typeof voz === "string" && /^[a-z]{2,3}-[A-Z]{2}-[A-Za-z]+Neural$/.test(voz) ? voz : null;
+}
+
+async function conEdge({ texto, dir, voz, log }) {
+  const bin = rutaEdge();
+  if (!existsSync(bin)) {
+    throw new Error(
+      "edge-tts no está instalado. Ejecuta: python3 -m venv .venv-audio && .venv-audio/bin/pip install edge-tts",
+    );
+  }
+  const elegida = vozNeuronal(voz) ?? vozPorIdioma("es");
+  const trozos = trocear(texto, 4000);
+  log(`voz neuronal ${elegida}: ${trozos.length} fragmento(s), ${texto.length} caracteres`);
+
+  const temporal = mkdtempSync(join(tmpdir(), "dato-y-ruido-edge-"));
+  const partes = [];
+  try {
+    for (const [indice, trozo] of trozos.entries()) {
+      const guion = join(temporal, `${indice}.txt`);
+      const parte = join(temporal, `${indice}.mp3`);
+      writeFileSync(guion, trozo, "utf8");
+      execFileSync(
+        bin,
+        ["--voice", elegida, "--file", guion, "--rate=-4%", "--write-media", parte],
+        { stdio: "pipe" },
+      );
+      if (!existsSync(parte)) throw new Error(`edge-tts no escribió el fragmento ${indice + 1}`);
+      partes.push(parte);
+      log(`  fragmento ${indice + 1}/${trozos.length}`);
+    }
+
+    const salida = join(dir, "audio.mp3");
+    if (partes.length === 1) {
+      copyFileSync(partes[0], salida);
+    } else {
+      const lista = join(temporal, "lista.txt");
+      writeFileSync(lista, partes.map((parte) => `file '${parte}'`).join("\n"), "utf8");
+      execFileSync("ffmpeg", ["-y", "-f", "concat", "-safe", "0", "-i", lista, "-c", "copy", salida], {
+        stdio: "pipe",
+      });
+    }
+    log("audio neuronal generado");
+    return "audio.mp3";
+  } finally {
+    rmSync(temporal, { recursive: true, force: true });
+  }
 }
 
 async function conVozLocal({ texto, dir, log }) {
